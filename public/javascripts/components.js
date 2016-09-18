@@ -30,10 +30,7 @@ AFRAME.registerComponent('spawner', {
     var entityRotation;
     position.setFromMatrixPosition(matrixWorld);
     entity.setAttribute('position', position);
-    // Have the spawned entity face the same direction as the entity.
-    // Allow the entity to further modify the inherited rotation.
-    position.setFromMatrixPosition(matrixWorld);
-    entity.setAttribute('position', position);
+    //entity.setAttribute('position', position);
     entity.setAttribute('mixin', this.data.mixin);
     entity.addEventListener('loaded', function () {
       entityRotation = entity.getComputedAttribute('rotation');
