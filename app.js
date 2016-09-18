@@ -83,7 +83,6 @@ io.on('connection', function(socket){
 
 	socket.on('move', function(player){
 		pNum = player[0];
-		console.log(pNum);
    	players[pNum].xCoord = player[1];
 		players[pNum].yCoord = player[2];
 		players[pNum].zCoord = player[3];

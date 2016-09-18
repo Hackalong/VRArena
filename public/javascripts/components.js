@@ -15,7 +15,6 @@ AFRAME.registerComponent('update-players', {
       }
       var player = document.getElementById('p' + p.playerNum);
       if (player == null || player == undefined) {
-        console.log('Created new');
         var scene = document.getElementById('player-container');
         player = document.createElement('a-obj-model');
         player.id = 'p' + p.playerNum;
