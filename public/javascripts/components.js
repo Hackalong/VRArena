@@ -7,6 +7,25 @@ AFRAME.registerComponent('projectile', {
   }
 });
 
+AFRAME.registerComponent('updatePlayers', {
+  tick: function (el) {
+    
+  }
+});
+
+AFRAME.registerComponent('player', {
+  tick: function () {
+  //  console.log(this);
+    var pos = this.el.components.position.data;
+    var rot = this.el.components.rotation.data;
+    if (playerNum == null || playerNum == undefined) {
+      return;
+    }
+    var player = [playerNum, pos.x, pos.y, pos.z, rot.x, rot.y, rot.z];
+    socket.emit('move', player);
+  }
+});
+
 AFRAME.registerComponent('spawner', {
   schema: {
     on: { default: 'click' },
@@ -30,7 +49,6 @@ AFRAME.registerComponent('spawner', {
     var entityRotation;
     position.setFromMatrixPosition(matrixWorld);
     entity.setAttribute('position', position);
-    //entity.setAttribute('position', position);
     entity.setAttribute('mixin', this.data.mixin);
     entity.addEventListener('loaded', function () {
       entityRotation = entity.getComputedAttribute('rotation');

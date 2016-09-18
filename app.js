@@ -15,23 +15,17 @@ var io = require('socket.io').listen(http);
 
 var numPlayers = 0;
 
-Player = function(playerNum0, xCoord0, yCoord0, zCoord0, rot0){
+Player = function(playerNum0, xCoord0, yCoord0, zCoord0, xRot0, yRot0, zRot0){
 	this.playerNum = playerNum0;
 	this.xCoord = xCoord0;
 	this.yCoord = yCoord0;
 	this.zCoord = zCoord0;
-	this.rot = rot0;
-};
-
-Projectile = function(xCoord0, yCoord0, zCoord0, vector0){
-	this.xCoord = xCoord0;
-	this.yCoord = yCoord0;
-	this.zCoord = zCoord0;
-	this.vector = vector0;
+	this.xRot = xRot0;
+	this.yRot = yRot0;
+	this.zRot = zRot0;
 };
 
 var players = [];
-var projectiles = [];
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -82,45 +76,48 @@ app.use(function(err, req, res, next) {
 module.exports = app;
 
 io.on('connection', function(socket){
-	players.push(new Player(0, 1, 2, 3, 4));
 
 	socket.on('chat message', function(msg){
 		io.emit('chat message', msg);
 	});
-	
+
 	socket.on('move', function(player){
-		pNum = player;//.playerNum;
-   		//players[pNum].xCoord = player.xCoord;
-		//players[pNum].yCoord = player.yCoord;
-		//players[pNum].zCoord = player.zCoord;
-		//players[pNum].rot = player.rot;
-		console.log('move: ' + pNum);
-	}); 
-	
-	socket.on('shoot', function(projectile){
-    	projectiles.push(new Projectile(0, 0, 0, 0));
-	});  
-  
-    ++numPlayers;
-    console.log('users connected: ' + numPlayers);
-    io.emit('connect', numPlayers);
-    socket.on('disconnect', function(){
-        --numPlayers;
-        console.log('users connected: ' + numPlayers);
-        io.emit('connect', numPlayers);
-    });
+		pNum = player[0];
+		console.log(pNum);
+   	players[pNum].xCoord = player[1];
+		players[pNum].yCoord = player[2];
+		players[pNum].zCoord = player[3];
+		players[pNum].xRot = player[4];
+		players[pNum].yRot = player[5];
+		players[pNum].zRot = player[6];
+		console.log('move: ' + players[pNum].xCoord);
+	});
+
+  console.log('users connected: ' + numPlayers);
+	io.emit('connect', numPlayers);
+	console.log("connect");
+
+	socket.on('playerNum', function(temp){
+		io.emit('playerNum', numPlayers);
+		players.push(new Player(numPlayers, 0, 0, 0, 0, 0, 0, 0));
+		console.log(players);
+		++numPlayers;
+	});
+
+	socket.on('disconnect', function(){
+		console.log("disconnect");
+	});
+
+  /*socket.on('disconnect', function(){
+      --numPlayers;
+       console.log('users connected: ' + numPlayers);
+       io.emit('connect', numPlayers);
+  });*/
 
 	var intervalID = setInterval(function(){
 		//console.log(players[0].xCoord);
 		//console.log(players[0].zCoord);
-
-		projectiles.forEach(function(projectile){
-			projectile.xCoord += projectile.vector.xCoord;
-			projectile.yCoord += projectile.vector.yCoord;
-			projectile.zCoord += projectile.vector.zCoord;
-		});
-
-		var data = [players, projectiles];
+		var data = players;
 		io.emit('update', data)
 	;}, 5000);
 
@@ -129,7 +126,3 @@ io.on('connection', function(socket){
 http.listen(3001, function(){
 	console.log('listening on *:3001');
 });
-
-
-
-
