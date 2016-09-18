@@ -1,0 +1,21 @@
+{
+  "name": "Hackathon Presentation Dependencies",
+  "homepage": "https://github.com/Hackalong/VRArena",
+  "authors": [
+    "Matthew Coupal <coupal.matthew@gmail.com>"
+  ],
+  "description": "The dependencies needed to display the presentation.",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "reveal.js": "^3.3.0"
+  }
+}
