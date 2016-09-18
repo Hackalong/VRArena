@@ -11,8 +11,8 @@ block content
     input(type="text", name="name1", id="m1", autocomplete="off")
     button update player
   script(src="javascripts/socket.io.js")
-  script(src="http://code.jquery.com/jquery-1.11.1.js")  
- 
+  script(src="http://code.jquery.com/jquery-1.11.1.js")
+
   script.
     var socket = io();
     $('#f1').submit(function(){
@@ -32,4 +32,3 @@ block content
     socket.on('update', function(data){
       $('#messages').append($('<li>').text(data[0][0].zCoord));
     });
-

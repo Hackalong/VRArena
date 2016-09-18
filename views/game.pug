@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  script(src="https://aframe.io/releases/0.3.0/aframe.min.js")
+  script(src="//cdn.rawgit.com/donmccurdy/aframe-extras/v2.5.2/dist/aframe-extras.min.js")
+  script(src="http://code.jquery.com/jquery-1.11.1.js")
+  script(src="javascripts/socket.io.js")
+  script(src="javascripts/players.js")
+  script(src="javascripts/gamesockets.js")
+  script(type="text/javascript", src="javascripts/components.js")
+  a-scene(physics, fog="type: exponential; color: #445555; density: 0.15;")
+    a-assets
+      a-mixin(id="bullet", geometry="primitive: box; width: 0.2; height: 0.2; depth: 0.2; translate: 0 -2 0",
+              material="color: red; metalness: 0.2; roughness: 0.3", projectile="speed: -1.5", rotation="90 0 0", static-body)
+      a-asset-item(id="person-obj", src="assets/person4.obj")
+      a-asset-item(id="person-mtl", src="assets/person4.mtl")
+    a-obj-model(src="#person-obj", mtl="#person-mtl", position="0 0 0", static-body)
+    a-sky(color="#6EBAA7")
+    a-box(id="big-block", color="#39BB82", width="10", height="5", depth="6", position="0 2.5 -15", static-body)
+    a-grid(static-body)
+    a-entity(id="player-container", update-players)
+    a-ocean(width="100", depth="100", position="0 0.5 0" density="40")
+    a-box(color="#39BB82",
+           width="75", height="5", depth="3",
+           position="-75 2.5 -5",
+           static-body)
+    a-box(color="#39BB82",
+           width="75", height="5", depth="3",
+           position="75 2.5 5",
+           static-body)
+    a-entity(player, camera, universal-controls, kinematic-body, position="10 1.764 0", spawner="mixin: bullet; on: click", click-listener, jump-ability="maxJumps: 1; distance: 5;")
