@@ -19,12 +19,13 @@ AFRAME.registerComponent('update-players', {
         player = document.createElement('a-obj-model');
         player.id = 'p' + p.playerNum;
         player.setAttribute('src', '#person-obj');
-        player.setAttribute('mtl', '#person-mtl');
         player.setAttribute('scale', '0.05 0.05 0.05');
+        player.setAttribute('color', '#'+(Math.random()*0xFFFFFF<<0).toString(16));
         player.setAttribute('static-body');
         scene.appendChild(player);
       }
-      player.setAttribute('position', p.xCoord + ' ' + p.yCoord  + ' ' + p.zCoord);
+      var newY = p.yCoord - 1.5;
+      player.setAttribute('position', p.xCoord + ' ' + newY  + ' ' + p.zCoord);
       player.setAttribute('rotation', p.xRot + ' ' + p.yRot + ' ' + p.zRot);
     });
   }

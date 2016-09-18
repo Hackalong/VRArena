@@ -8,24 +8,64 @@ block content
   script(src="javascripts/players.js")
   script(src="javascripts/gamesockets.js")
   script(type="text/javascript", src="javascripts/components.js")
-  a-scene(physics, fog="type: exponential; color: #445555; density: 0.15;")
+  a-scene(physics, fog="type: exponential; color: #445555; density: 0.02;")
+
     a-assets
       a-mixin(id="bullet", geometry="primitive: box; width: 0.2; height: 0.2; depth: 0.2; translate: 0 -2 0",
               material="color: red; metalness: 0.2; roughness: 0.3", projectile="speed: -1.5", rotation="90 0 0", static-body)
       a-asset-item(id="person-obj", src="assets/person4.obj")
       a-asset-item(id="person-mtl", src="assets/person4.mtl")
-    a-obj-model(src="#person-obj", mtl="#person-mtl", position="0 0 0", static-body)
+
+    a-obj-model(src="#person-obj", color="#965A38", position="0 0 0", static-body)
     a-sky(color="#6EBAA7")
-    a-box(id="big-block", color="#39BB82", width="10", height="5", depth="6", position="0 2.5 -15", static-body)
+
+    a-box(color="#F6546A", width="10", height="5", depth="6", position="0 2.5 -15", static-body)
     a-grid(static-body)
+
     a-entity(id="player-container", update-players)
     a-ocean(width="100", depth="100", position="0 0.5 0" density="40")
+
+    //-Course
+    a-box(color="#F6546A", width="10", height="2.5", depth="15", rotation="30 0 0" position="10 2 -15", static-body)
+    a-box(color="#00CED1", width="5", height="8", depth="5", position="10 9 -25", static-body)
+    a-box(color="#00CED1", width="5", height="8", depth="5", position="8 12 -30", static-body)
+    a-box(color="#ff0000", width="5", height="8", depth="5", position="2 15 -35", static-body)
+    a-box(color="#00CED1", width="5", height="8", depth="5", position="-10 12 -30", static-body)
+    a-box(color="#00CED1", width="5", height="8", depth="5", position="-15 12 -20", static-body)
+    a-box(color="#FFA500", width="5", height="8", depth="2", position="-20 10 -15", static-body)
+    a-box(color="#FFA500", width="5", height="8", depth="1", position="-25 10 -5", static-body)
+    a-box(color="#FFA500", width="5", height="8", depth="1", position="-32 10 5", static-body)
+    a-box(color="#FFA500", width="5", height="8", depth="1", position="-32 15 15", static-body)
+    a-box(color="#FFA500", width="5", height="8", depth="1", position="-32 10 25", static-body)
+    a-box(color="#333333", width="5", height="8", depth="3", position="-25 10 30", static-body)
+    a-box(color="#333333", width="5", height="8", depth="3", position="-15 10 30", static-body)
+    a-box(color="#333333", width="5", height="8", depth="3", position="-5 10 30", static-body)
+    a-box(color="#333333", width="5", height="3", depth="3", position="-5 18 25", static-body)
+    a-box(color="#333333", width="5", height="3", depth="1", position="-5 21 30", static-body)
+    a-box(color="#333333", width="5", height="3", depth="1", position="-5 24 25", static-body)
+    a-box(color="#333333", width="5", height="3", depth="1", position="-5 27 30", static-body)
+    a-box(opacity="0", width="5", height="3", depth="50", position="1 29 15", static-body)
+
+
+
+
+    //- End course
+
     a-box(color="#39BB82",
-           width="75", height="5", depth="3",
-           position="-75 2.5 -5",
+           width="3", height="150", depth="100",
+           position="-35 2.5 0",
            static-body)
     a-box(color="#39BB82",
-           width="75", height="5", depth="3",
-           position="75 2.5 5",
+           width="3", height="150", depth="100",
+           position="35 2.5 0",
            static-body)
+    a-box(color="#39BB82",
+          width="100", height="150", depth="3",
+          position="0 2.5 -35",
+          static-body)
+    a-box(color="#39BB82",
+          width="100", height="150", depth="3",
+          position="0 2.5 35",
+          static-body)
+
     a-entity(player, camera, universal-controls, kinematic-body, position="10 1.764 0", spawner="mixin: bullet; on: click", click-listener, jump-ability="maxJumps: 1; distance: 5;")
