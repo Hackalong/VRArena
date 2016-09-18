@@ -7,22 +7,41 @@ AFRAME.registerComponent('projectile', {
   }
 });
 
-AFRAME.registerComponent('updatePlayers', {
-  tick: function (el) {
-    
+AFRAME.registerComponent('update-players', {
+  tick: function () {
+    players.forEach(function (p) {
+      if (p.playerNum == playerNum || playerNum == null || p.playerNum == null || playerNum == undefined || p.playerNum == undefined) {
+        return;
+      }
+      var player = document.getElementById('p' + p.playerNum);
+      if (player == null || player == undefined) {
+        console.log('Created new');
+        var scene = document.getElementById('player-container');
+        player = document.createElement('a-obj-model');
+        player.id = 'p' + p.playerNum;
+        player.setAttribute('src', '#person-obj');
+        player.setAttribute('mtl', '#person-mtl');
+        player.setAttribute('scale', '0.05 0.05 0.05');
+        player.setAttribute('static-body');
+        scene.appendChild(player);
+      }
+      player.setAttribute('position', p.xCoord + ' ' + p.yCoord  + ' ' + p.zCoord);
+      player.setAttribute('rotation', p.xRot + ' ' + p.yRot + ' ' + p.zRot);
+    });
   }
 });
 
 AFRAME.registerComponent('player', {
   tick: function () {
-  //  console.log(this);
     var pos = this.el.components.position.data;
     var rot = this.el.components.rotation.data;
     if (playerNum == null || playerNum == undefined) {
       return;
     }
     var player = [playerNum, pos.x, pos.y, pos.z, rot.x, rot.y, rot.z];
-    socket.emit('move', player);
+    if (playerNum != -1) {
+      socket.emit('move', player);
+    }
   }
 });
 

@@ -90,7 +90,6 @@ io.on('connection', function(socket){
 		players[pNum].xRot = player[4];
 		players[pNum].yRot = player[5];
 		players[pNum].zRot = player[6];
-		console.log('move: ' + players[pNum].xCoord);
 	});
 
   console.log('users connected: ' + numPlayers);
@@ -100,7 +99,6 @@ io.on('connection', function(socket){
 	socket.on('playerNum', function(temp){
 		io.emit('playerNum', numPlayers);
 		players.push(new Player(numPlayers, 0, 0, 0, 0, 0, 0, 0));
-		console.log(players);
 		++numPlayers;
 	});
 
@@ -119,7 +117,7 @@ io.on('connection', function(socket){
 		//console.log(players[0].zCoord);
 		var data = players;
 		io.emit('update', data)
-	;}, 5000);
+	;}, 33);
 
 });
 

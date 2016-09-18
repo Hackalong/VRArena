@@ -1,1 +1,1 @@
-var players = {};
+var players = [];

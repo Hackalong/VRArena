@@ -1,9 +1,11 @@
 var socket = io();
-var playerNum = 0;
+var playerNum = -1;
 
 socket.on('playerNum', function(data){
   console.log("data showing: " + data);
-  playerNum = data;
+  if (playerNum === -1) {
+    playerNum = data;
+  }
 });
 
 socket.emit('playerNum', playerNum);
@@ -25,5 +27,5 @@ socket.on('chat message', function(msg){
 });
 
 socket.on('update', function(data){
-  console.log(data);
+  players = data;
 });
