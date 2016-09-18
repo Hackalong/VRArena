@@ -5,15 +5,38 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var http = require('http').Server(express);
-var io = require('socket.io').listen(http);
-
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
 
+var http = require('http').Server(app);
+var io = require('socket.io').listen(http);
+
 var numPlayers = 0;
+
+Player = function(playerNumber0, xCoord0, yCoord0, zCoord0, rot0){
+	this.playerNumber = playerNumber0;
+	this.xCoord = xCoord0;
+	this.yCoord = yCoord0;
+	this.zCoord = zCoord0;
+	this.rot = rot0;
+};
+
+Projectile = function(xCoord0, yCoord0, zCoord0, vector0){
+	this.xCoord = xCoord0;
+	this.yCoord = yCoord0;
+	this.zCoord = zCoord0;
+	this.vector = vector0;
+};
+
+var players = [];
+var projectiles = [];
+
+/*var data = { items: [
+	playerPositions: players
+	projectilePositions: projectiles
+]};*/
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -61,25 +84,45 @@ app.use(function(err, req, res, next) {
   });
 });
 
-
 module.exports = app;
 
 io.on('connection', function(socket){
-	socket.on('chat message', msg);
+	players.push(new Player(0, 1, 2, 3, 4));
+
+	socket.on('chat message', function(msg){
 		io.emit('chat message', msg);
 	});
-	socket.on('move', function(position){
-        io.emit('move', position);
+	
+	socket.on('update', function(position){
+        io.emit('update', position);
     }); 
-        
+	
+	socket.on('shoot', function(position){
+        io.emit('shoot', positionAnd);
+    	projectiles.push(new Projectile(0, 0, 0, 0));
+	}); 
+      
     ++numPlayers;
     console.log('users connected: ' + numPlayers);
     io.emit('connect', numPlayers);
-
     socket.on('disconnect', function(){
         --numPlayers;
         console.log('users connected: ' + numPlayers);
         io.emit('connect', numPlayers);
-    }); 
+    });
+
+	var intervalID = setInterval(function(){
+		//console.log(players[0].xCoord);
+		//console.log(players[0].zCoord);
+		//io.emit('chat message', players[0].xCoord);
+	}, 1000);
 
 });
+
+http.listen(3001, function(){
+	console.log('listening on *:3001');
+});
+
+
+
+
