@@ -99,8 +99,8 @@ io.on('connection', function(socket){
 	
 	socket.on('shoot', function(projectile){
     	projectiles.push(new Projectile(0, 0, 0, 0));
-	}); 
-      
+	});  
+  
     ++numPlayers;
     console.log('users connected: ' + numPlayers);
     io.emit('connect', numPlayers);
@@ -113,6 +113,12 @@ io.on('connection', function(socket){
 	var intervalID = setInterval(function(){
 		//console.log(players[0].xCoord);
 		//console.log(players[0].zCoord);
+
+		projectiles.forEach(function(projectile){
+			projectile.xCoord += projectile.vector.xCoord;
+			projectile.yCoord += projectile.vector.yCoord;
+			projectile.zCoord += projectile.vector.zCoord;
+		});
 
 		var data = [players, projectiles];
 		io.emit('update', data)
