@@ -89,11 +89,12 @@ io.on('connection', function(socket){
 	});
 	
 	socket.on('move', function(player){
-		pNum = player.playerNum;
-   		players[pNum].xCoord = player.xCoord;
-		players[pNum].yCoord = player.yCoord;
-		players[pNum].zCoord = player.zCoord;
-		players[pNum].rot = player.rot;
+		pNum = player;//.playerNum;
+   		//players[pNum].xCoord = player.xCoord;
+		//players[pNum].yCoord = player.yCoord;
+		//players[pNum].zCoord = player.zCoord;
+		//players[pNum].rot = player.rot;
+		console.log('move: ' + pNum);
 	}); 
 	
 	socket.on('shoot', function(projectile){
@@ -114,9 +115,8 @@ io.on('connection', function(socket){
 		//console.log(players[0].zCoord);
 
 		var data = [players, projectiles];
-		io.emit('chat message', data);
-		//io.emit('update', data)
-	;}, 1000);
+		io.emit('update', data)
+	;}, 5000);
 
 });
 

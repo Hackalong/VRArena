@@ -4,21 +4,32 @@ block content
   h1= title
   p Welcome to #{title}
   ul(id="messages")
-  form(action="")
+  form(id="f1", action="")
     input(type="text", name="name", id="m", autocomplete="off")
     button submit
+  form(id="f2", action="")
+    input(type="text", name="name1", id="m1", autocomplete="off")
+    button update player
   script(src="javascripts/socket.io.js")
   script(src="http://code.jquery.com/jquery-1.11.1.js")  
  
   script.
     var socket = io();
-    $('form').submit(function(){
+    $('#f1').submit(function(){
       socket.emit('chat message', $('#m').val());
       $('#m').val('');
       return false;
     });
-      socket.on('chat message', function(msg){
-      $('#messages').append($('<li>').text(msg[0][0].zCoord));
+    $('#f2').submit(function(){
+      socket.emit('move', $('#m1').val());
+      $('#m1').val('');
+      return false;
     });
 
+    socket.on('chat message', function(msg){
+      $('#messages').append($('<li>').text(msg));
+    });
+    socket.on('update', function(data){
+      $('#messages').append($('<li>').text(data[0][0].zCoord));
+    });
 
