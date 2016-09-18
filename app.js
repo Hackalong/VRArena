@@ -15,8 +15,8 @@ var io = require('socket.io').listen(http);
 
 var numPlayers = 0;
 
-Player = function(playerNumber0, xCoord0, yCoord0, zCoord0, rot0){
-	this.playerNumber = playerNumber0;
+Player = function(playerNum0, xCoord0, yCoord0, zCoord0, rot0){
+	this.playerNum = playerNum0;
 	this.xCoord = xCoord0;
 	this.yCoord = yCoord0;
 	this.zCoord = zCoord0;
@@ -32,11 +32,6 @@ Projectile = function(xCoord0, yCoord0, zCoord0, vector0){
 
 var players = [];
 var projectiles = [];
-
-/*var data = { items: [
-	playerPositions: players
-	projectilePositions: projectiles
-]};*/
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -93,12 +88,15 @@ io.on('connection', function(socket){
 		io.emit('chat message', msg);
 	});
 	
-	socket.on('update', function(position){
-        io.emit('update', position);
-    }); 
+	socket.on('move', function(player){
+		pNum = player.playerNum;
+   		players[pNum].xCoord = player.xCoord;
+		players[pNum].yCoord = player.yCoord;
+		players[pNum].zCoord = player.zCoord;
+		players[pNum].rot = player.rot;
+	}); 
 	
-	socket.on('shoot', function(position){
-        io.emit('shoot', positionAnd);
+	socket.on('shoot', function(projectile){
     	projectiles.push(new Projectile(0, 0, 0, 0));
 	}); 
       
@@ -114,8 +112,11 @@ io.on('connection', function(socket){
 	var intervalID = setInterval(function(){
 		//console.log(players[0].xCoord);
 		//console.log(players[0].zCoord);
-		//io.emit('chat message', players[0].xCoord);
-	}, 1000);
+
+		var data = [players, projectiles];
+		io.emit('chat message', data);
+		//io.emit('update', data)
+	;}, 1000);
 
 });
 

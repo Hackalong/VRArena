@@ -18,7 +18,7 @@ block content
       return false;
     });
       socket.on('chat message', function(msg){
-      $('#messages').append($('<li>').text(msg));
+      $('#messages').append($('<li>').text(msg[0][0].zCoord));
     });
 
 
