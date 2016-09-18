@@ -5,10 +5,15 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var http = require('http').Server(express);
+var io = require('socket.io').listen(http);
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+var numPlayers = 0;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -58,3 +63,23 @@ app.use(function(err, req, res, next) {
 
 
 module.exports = app;
+
+io.on('connection', function(socket){
+	socket.on('chat message', msg);
+		io.emit('chat message', msg);
+	});
+	socket.on('move', function(position){
+        io.emit('move', position);
+    }); 
+        
+    ++numPlayers;
+    console.log('users connected: ' + numPlayers);
+    io.emit('connect', numPlayers);
+
+    socket.on('disconnect', function(){
+        --numPlayers;
+        console.log('users connected: ' + numPlayers);
+        io.emit('connect', numPlayers);
+    }); 
+
+});
