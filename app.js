@@ -10,6 +10,29 @@ var users = require('./routes/users');
 
 var app = express();
 
+var http = require('http').Server(app);
+var io = require('socket.io').listen(http);
+
+var numPlayers = 0;
+
+Player = function(playerNum0, xCoord0, yCoord0, zCoord0, rot0){
+	this.playerNum = playerNum0;
+	this.xCoord = xCoord0;
+	this.yCoord = yCoord0;
+	this.zCoord = zCoord0;
+	this.rot = rot0;
+};
+
+Projectile = function(xCoord0, yCoord0, zCoord0, vector0){
+	this.xCoord = xCoord0;
+	this.yCoord = yCoord0;
+	this.zCoord = zCoord0;
+	this.vector = vector0;
+};
+
+var players = [];
+var projectiles = [];
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -56,5 +79,57 @@ app.use(function(err, req, res, next) {
   });
 });
 
-
 module.exports = app;
+
+io.on('connection', function(socket){
+	players.push(new Player(0, 1, 2, 3, 4));
+
+	socket.on('chat message', function(msg){
+		io.emit('chat message', msg);
+	});
+	
+	socket.on('move', function(player){
+		pNum = player;//.playerNum;
+   		//players[pNum].xCoord = player.xCoord;
+		//players[pNum].yCoord = player.yCoord;
+		//players[pNum].zCoord = player.zCoord;
+		//players[pNum].rot = player.rot;
+		console.log('move: ' + pNum);
+	}); 
+	
+	socket.on('shoot', function(projectile){
+    	projectiles.push(new Projectile(0, 0, 0, 0));
+	});  
+  
+    ++numPlayers;
+    console.log('users connected: ' + numPlayers);
+    io.emit('connect', numPlayers);
+    socket.on('disconnect', function(){
+        --numPlayers;
+        console.log('users connected: ' + numPlayers);
+        io.emit('connect', numPlayers);
+    });
+
+	var intervalID = setInterval(function(){
+		//console.log(players[0].xCoord);
+		//console.log(players[0].zCoord);
+
+		projectiles.forEach(function(projectile){
+			projectile.xCoord += projectile.vector.xCoord;
+			projectile.yCoord += projectile.vector.yCoord;
+			projectile.zCoord += projectile.vector.zCoord;
+		});
+
+		var data = [players, projectiles];
+		io.emit('update', data)
+	;}, 5000);
+
+});
+
+http.listen(3001, function(){
+	console.log('listening on *:3001');
+});
+
+
+
+
